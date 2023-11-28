@@ -10,10 +10,7 @@
     "author": "Enzo Bozzani",
     "license": "ISC",
     "dependencies": {
-        "@adminjs/express": "^6.1.0",
-        "@adminjs/sequelize": "^4.0.0",
-        "@adminjs/upload": "^4.0.1",
-        "adminjs": "^7.4.1",
+        "bcrypt": "~5.0.1",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",
         "express-formidable": "^1.2.0",
@@ -21,6 +18,7 @@
         "sequelize": "^6.35.1"
     },
     "devDependencies": {
+        "@types/bcrypt": "~5.0.0",
         "@types/express": "^4.17.21",
         "@types/node": "^20.10.0",
         "sequelize-cli": "^6.6.2",
