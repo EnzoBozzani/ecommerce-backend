@@ -3,6 +3,6 @@ import ProductsController from './controllers/ProductsController';
 
 const router = express.Router();
 
-router.get('/products-by-price-ASC', ProductsController.findOrderedByPriceASC);
+router.get('/products', ProductsController.findProducts);
 
 export { router };

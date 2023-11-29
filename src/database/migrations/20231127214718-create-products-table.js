@@ -39,6 +39,10 @@ module.exports = {
 				defaultValue: 0,
 				type: Sequelize.DataTypes.INTEGER,
 			},
+			in_stock: {
+				allowNull: false,
+				type: Sequelize.DataTypes.INTEGER,
+			},
 			created_at: {
 				allowNull: false,
 				type: Sequelize.DataTypes.DATE,

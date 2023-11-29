@@ -10,13 +10,12 @@ export interface Product {
 	image2_url?: string;
 	image3_url?: string;
 	num_favorites: number;
+	in_stock: number;
 }
 
 export interface ProductCreationAttributes extends Optional<Product, 'id'> {}
 
-export interface ProductInstance
-	extends Model<Product, ProductCreationAttributes>,
-		Product {}
+export interface ProductInstance extends Model<Product, ProductCreationAttributes>, Product {}
 
 export const Product = sequelize.define<ProductInstance, Product>('Product', {
 	id: {
@@ -52,6 +51,10 @@ export const Product = sequelize.define<ProductInstance, Product>('Product', {
 	num_favorites: {
 		allowNull: false,
 		defaultValue: 0,
+		type: DataTypes.INTEGER,
+	},
+	in_stock: {
+		allowNull: false,
 		type: DataTypes.INTEGER,
 	},
 });
