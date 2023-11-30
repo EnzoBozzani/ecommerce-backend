@@ -3,3 +3,5 @@ node_modules
 .env
 
 notes.txt
+
+src/database/seeders/20231128015644-create-admin-user.js
