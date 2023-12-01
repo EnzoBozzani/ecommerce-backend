@@ -1,5 +1,6 @@
 import { Product } from '../models';
 import { Op } from 'sequelize';
+import { ProductCreationAttributes } from '../models/Product';
 
 export default class ProductsService {
 	static async findProducts(
@@ -31,6 +32,18 @@ export default class ProductsService {
 
 	static async findById(productId: number) {
 		const product = await Product.findByPk(productId);
+		return product;
+	}
+
+	static async delete(productId: number) {
+		const product = await Product.findByPk(productId);
+		if (!product) return { message: "Product doesn't exist!" };
+		await product.destroy();
+		return { message: 'Successfully deleted!' };
+	}
+
+	static async create(attributes: ProductCreationAttributes) {
+		const product = await Product.create(attributes);
 		return product;
 	}
 }
