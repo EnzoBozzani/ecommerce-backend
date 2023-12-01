@@ -9,7 +9,7 @@ export interface Favorite {
 }
 
 export interface FavoriteInstance extends Model<Favorite>, Favorite {
-	product?: ProductInstance;
+	Product?: ProductInstance;
 	user?: UserInstance;
 }
 

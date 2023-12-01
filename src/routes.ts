@@ -11,6 +11,8 @@ router.post('/auth/login', AuthController.login);
 
 router.get('/products', ProductsController.findProducts);
 
+router.get('/favorites', ensureAuth, FavoritesController.getFavoritedProducts);
 router.post('/favorites', ensureAuth, FavoritesController.save);
+router.delete('/favorites/:id', ensureAuth, FavoritesController.delete);
 
 export { router };

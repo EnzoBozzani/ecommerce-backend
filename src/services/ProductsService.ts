@@ -28,4 +28,9 @@ export default class ProductsService {
 			total: count,
 		};
 	}
+
+	static async findById(productId: number) {
+		const product = await Product.findByPk(productId);
+		return product;
+	}
 }
