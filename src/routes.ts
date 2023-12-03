@@ -4,15 +4,18 @@ import AuthController from './controllers/AuthController';
 import { ensureAuth } from './middlewares/auth';
 import FavoritesController from './controllers/FavoritesController';
 import UsersController from './controllers/UsersController';
+import AdminController from './controllers/AdminController';
 
 const router = express.Router();
+
+router.get('/admin/users', ensureAuth, AdminController.usersList);
+router.post('/admin/products', ensureAuth, AdminController.createProduct);
+router.delete('/admin/products', ensureAuth, AdminController.deleteProduct);
 
 router.post('/auth/register', AuthController.register);
 router.post('/auth/login', AuthController.login);
 
 router.get('/products', ProductsController.findProducts);
-router.post('/products', ensureAuth, ProductsController.createProduct);
-router.delete('/products', ensureAuth, ProductsController.deleteProduct);
 
 router.get('/favorites', ensureAuth, FavoritesController.getFavoritedProducts);
 router.post('/favorites', ensureAuth, FavoritesController.save);

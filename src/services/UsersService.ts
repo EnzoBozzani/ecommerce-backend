@@ -1,5 +1,5 @@
 import { User } from '../models';
-import { UserCreationAttributes } from '../models/User';
+import { UserCreationAttributes, UserInstance } from '../models/User';
 
 type UserDataUpdate = {
 	firstName?: string;
@@ -24,5 +24,24 @@ export default class UsersService {
 		const user = await User.findByPk(userId);
 		await user?.update(attributes);
 		return user;
+	}
+
+	static async getUsersList(page: number, perPage: number) {
+		const users = await User.findAll({
+			order: [['name', 'ASC']],
+			where: { role: 'user' },
+		});
+	}
+
+	static async isAdmin(user: UserInstance) {
+		const u = await User.findOne({
+			where: {
+				firstName: user.firstName,
+				id: user.id,
+				email: user.email,
+			},
+			attributes: ['role'],
+		});
+		return u?.role === 'admin';
 	}
 }
