@@ -8,6 +8,7 @@ import AdminController from './controllers/AdminController';
 
 const router = express.Router();
 
+router.post('/admin/auth/login', AdminController.login);
 router.get('/admin/users', ensureAuth, AdminController.usersList);
 router.post('/admin/products', ensureAuth, AdminController.createProduct);
 router.delete('/admin/products', ensureAuth, AdminController.deleteProduct);

@@ -27,10 +27,28 @@ export default class UsersService {
 	}
 
 	static async getUsersList(page: number, perPage: number) {
+		const offset = (page - 1) * perPage;
+
 		const users = await User.findAll({
-			order: [['name', 'ASC']],
+			order: [
+				['first_name', 'ASC'],
+				['last_name', 'ASC'],
+			],
 			where: { role: 'user' },
+			attributes: [
+				'id',
+				'firstName',
+				'lastName',
+				'phone',
+				'birth',
+				'email',
+				['updated_at', 'updatedAt'],
+				['created_at', 'createdAt'],
+			],
+			limit: perPage,
+			offset,
 		});
+		return users;
 	}
 
 	static async isAdmin(user: UserInstance) {

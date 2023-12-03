@@ -29,10 +29,10 @@ export default class AuthController {
 		const { email, password } = req.body;
 		try {
 			const user = await UsersService.findByEmail(email);
-			if (!user) return res.status(404).json({ message: 'Email não registrado' });
+			if (!user) return res.status(404).json({ message: 'Email not registered!' });
 			user.checkPassword(password, (err, isSame) => {
 				if (err) return res.status(400).json({ message: err.message });
-				if (!isSame) return res.status(401).json({ message: 'Senha incorreta' });
+				if (!isSame) return res.status(401).json({ message: 'Incorrect password!' });
 				const payload = {
 					id: user.id,
 					firstName: user.firstName,
