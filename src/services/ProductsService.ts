@@ -2,6 +2,16 @@ import { Product } from '../models';
 import { Op } from 'sequelize';
 import { ProductCreationAttributes } from '../models/Product';
 
+interface ProductUpdateAttributes {
+	name?: string;
+	description?: string;
+	price?: number;
+	image1_url?: string;
+	image2_url?: string;
+	image3_url?: string;
+	in_stock?: number;
+}
+
 export default class ProductsService {
 	static async findProducts(
 		page: number,
@@ -47,7 +57,7 @@ export default class ProductsService {
 		return product;
 	}
 
-	static async update(productId: number, attributes: ProductCreationAttributes) {
+	static async update(productId: number, attributes: ProductUpdateAttributes) {
 		const product = await Product.findByPk(productId);
 		await product?.update(attributes);
 		return product;

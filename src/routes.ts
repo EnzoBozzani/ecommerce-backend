@@ -5,14 +5,16 @@ import { ensureAuth } from './middlewares/auth';
 import FavoritesController from './controllers/FavoritesController';
 import UsersController from './controllers/UsersController';
 import AdminController from './controllers/AdminController';
+import multer from 'multer';
 
+const upload = multer();
 const router = express.Router();
 
 router.post('/admin/auth/login', AdminController.login);
 router.get('/admin/users', ensureAuth, AdminController.usersList);
-router.post('/admin/products', ensureAuth, AdminController.createProduct);
+router.post('/admin/products', ensureAuth, upload.array('images', 3), AdminController.createProduct);
 router.delete('/admin/products', ensureAuth, AdminController.deleteProduct);
-router.put('/admin/products', ensureAuth, AdminController.updateProduct);
+router.put('/admin/products', ensureAuth, upload.array('images', 3), AdminController.updateProduct);
 
 router.post('/auth/register', AuthController.register);
 router.post('/auth/login', AuthController.login);

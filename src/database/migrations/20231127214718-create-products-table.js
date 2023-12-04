@@ -22,17 +22,9 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.DataTypes.FLOAT,
 			},
-			image1_url: {
+			images: {
 				allowNull: false,
-				type: Sequelize.DataTypes.STRING,
-			},
-			image2_url: {
-				allowNull: true,
-				type: Sequelize.DataTypes.STRING,
-			},
-			image3_url: {
-				allowNull: true,
-				type: Sequelize.DataTypes.STRING,
+				type: Sequelize.DataTypes.ARRAY(Sequelize.DataTypes.STRING),
 			},
 			num_favorites: {
 				allowNull: false,
