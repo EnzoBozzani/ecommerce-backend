@@ -58,6 +58,30 @@ export default class AdminController {
 		}
 	}
 
+	static async updateProduct(req: AuthenticatedRequest, res: Response) {
+		const isAdmin = await UsersService.isAdmin(req.user!);
+		if (!isAdmin) return res.status(401).json({ message: 'Unauthorized! ' });
+		const { productId, name, description, price, image1_url, image2_url, image3_url, num_favorites, in_stock } =
+			req.body;
+		try {
+			const updatedProduct = await ProductsService.update(productId, {
+				name,
+				description,
+				price,
+				image1_url,
+				image2_url,
+				image3_url,
+				num_favorites,
+				in_stock,
+			});
+			return res.status(200).json(updatedProduct);
+		} catch (err) {
+			if (err instanceof Error) {
+				return res.status(400).json({ message: err.message });
+			}
+		}
+	}
+
 	static async login(req: Request, res: Response) {
 		const { email, password } = req.body;
 		try {

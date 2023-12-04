@@ -46,4 +46,10 @@ export default class ProductsService {
 		const product = await Product.create(attributes);
 		return product;
 	}
+
+	static async update(productId: number, attributes: ProductCreationAttributes) {
+		const product = await Product.findByPk(productId);
+		await product?.update(attributes);
+		return product;
+	}
 }

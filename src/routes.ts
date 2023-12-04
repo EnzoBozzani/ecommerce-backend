@@ -12,6 +12,7 @@ router.post('/admin/auth/login', AdminController.login);
 router.get('/admin/users', ensureAuth, AdminController.usersList);
 router.post('/admin/products', ensureAuth, AdminController.createProduct);
 router.delete('/admin/products', ensureAuth, AdminController.deleteProduct);
+router.put('/admin/products', ensureAuth, AdminController.updateProduct);
 
 router.post('/auth/register', AuthController.register);
 router.post('/auth/login', AuthController.login);
