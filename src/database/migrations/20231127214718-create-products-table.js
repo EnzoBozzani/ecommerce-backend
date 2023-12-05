@@ -35,6 +35,10 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.DataTypes.INTEGER,
 			},
+			featured: {
+				defaultValue: false,
+				type: Sequelize.DataTypes.BOOLEAN,
+			},
 			created_at: {
 				allowNull: false,
 				type: Sequelize.DataTypes.DATE,

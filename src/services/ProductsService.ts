@@ -6,10 +6,9 @@ interface ProductUpdateAttributes {
 	name?: string;
 	description?: string;
 	price?: number;
-	image1_url?: string;
-	image2_url?: string;
-	image3_url?: string;
+	images?: string[];
 	in_stock?: number;
+	featured?: boolean;
 }
 
 export default class ProductsService {

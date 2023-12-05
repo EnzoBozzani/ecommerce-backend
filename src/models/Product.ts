@@ -6,11 +6,10 @@ export interface Product {
 	name: string;
 	description: string;
 	price: number;
-	image1_url: string;
-	image2_url?: string;
-	image3_url?: string;
-	num_favorites: number;
+	images: string[];
+	num_favorites?: number;
 	in_stock: number;
+	featured?: boolean;
 }
 
 export interface ProductCreationAttributes extends Optional<Product, 'id'> {}
@@ -36,17 +35,9 @@ export const Product = sequelize.define<ProductInstance, Product>('Product', {
 		allowNull: false,
 		type: DataTypes.FLOAT,
 	},
-	image1_url: {
+	images: {
 		allowNull: false,
-		type: DataTypes.STRING,
-	},
-	image2_url: {
-		allowNull: true,
-		type: DataTypes.STRING,
-	},
-	image3_url: {
-		allowNull: true,
-		type: DataTypes.STRING,
+		type: DataTypes.ARRAY(DataTypes.STRING),
 	},
 	num_favorites: {
 		allowNull: false,
@@ -56,5 +47,9 @@ export const Product = sequelize.define<ProductInstance, Product>('Product', {
 	in_stock: {
 		allowNull: false,
 		type: DataTypes.INTEGER,
+	},
+	featured: {
+		defaultValue: false,
+		type: DataTypes.BOOLEAN,
 	},
 });

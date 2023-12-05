@@ -5,6 +5,7 @@ import ProductsService from '../services/ProductsService';
 import { getPaginationParams } from '../helpers/getPaginationParams';
 import JWTService from '../services/JWTService';
 import uploadFiles from '../helpers/uploadFiles';
+import deleteFolder from '../helpers/deleteFolder';
 
 export default class AdminController {
 	static async usersList(req: AuthenticatedRequest, res: Response) {
@@ -28,6 +29,7 @@ export default class AdminController {
 		const { productId } = req.body;
 		try {
 			const deleteMessage = await ProductsService.delete(+productId);
+			deleteFolder(productId);
 			return res.status(200).json(deleteMessage);
 		} catch (err) {
 			if (err instanceof Error) {
@@ -39,26 +41,30 @@ export default class AdminController {
 	static async createProduct(req: AuthenticatedRequest, res: Response) {
 		const isAdmin = await UsersService.isAdmin(req.user!);
 		if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
-		const { name, description, price, num_favorites, in_stock } = req.body;
+		const { name, description, price, num_favorites, in_stock, featured } = req.body;
 		try {
 			const newProduct = await ProductsService.create({
 				name,
 				description,
 				price,
-				image1_url: '',
-				image2_url: '',
-				image3_url: '',
+				images: [],
 				num_favorites,
 				in_stock,
+				featured,
 			});
 			//@ts-ignore
 			uploadFiles(req.files, newProduct.id);
+			const images = [`${process.env.URL}/product-${newProduct.id}/image1.png`];
+			//@ts-ignore
+			if (req.files[1]) {
+				images.push(`${process.env.URL}/product-${newProduct.id}/image2.png`);
+			}
+			//@ts-ignore
+			if (req.files[2]) {
+				images.push(`${process.env.URL}/product-${newProduct.id}/image3.png`);
+			}
 			await newProduct.update({
-				image1_url: `${process.env.URL}/product-${newProduct.id}/image1.png`,
-				//@ts-ignore
-				image2_url: req.files[1] ? `${process.env.URL}/product-${newProduct.id}/image2.png` : null,
-				//@ts-ignore
-				image3_url: req.files[2] ? `${process.env.URL}/product-${newProduct.id}/image3.png` : null,
+				images,
 			});
 			return res.status(201).json(newProduct);
 		} catch (err) {
@@ -71,23 +77,28 @@ export default class AdminController {
 	static async updateProduct(req: AuthenticatedRequest, res: Response) {
 		const isAdmin = await UsersService.isAdmin(req.user!);
 		if (!isAdmin) return res.status(401).json({ message: 'Unauthorized! ' });
-		const { productId, name, description, price, in_stock } = req.body;
+		const { productId, name, description, price, in_stock, featured } = req.body;
 		try {
 			//@ts-ignore
 			uploadFiles(req.files, productId);
 			let updatedProduct;
 			if (req.files) {
+				const images = [`${process.env.URL}/product-${productId}/image1.png`];
+				//@ts-ignore
+				if (req.files[1]) {
+					images.push(`${process.env.URL}/product-${productId}/image2.png`);
+				}
+				//@ts-ignore
+				if (req.files[2]) {
+					images.push(`${process.env.URL}/product-${productId}/image3.png`);
+				}
 				updatedProduct = await ProductsService.update(productId, {
 					name,
 					description,
 					price,
-					//@ts-ignore
-					image1_url: req.files[0] ? `${process.env.URL}/product-${productId}/image1.png` : null,
-					//@ts-ignore
-					image2_url: req.files[1] ? `${process.env.URL}/product-${productId}/image2.png` : null,
-					//@ts-ignore
-					image3_url: req.files[2] ? `${process.env.URL}/product-${productId}/image3.png` : null,
+					images,
 					in_stock,
+					featured,
 				});
 			} else {
 				updatedProduct = await ProductsService.update(productId, {
