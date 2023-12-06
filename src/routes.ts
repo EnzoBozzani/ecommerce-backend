@@ -6,6 +6,7 @@ import FavoritesController from './controllers/FavoritesController';
 import UsersController from './controllers/UsersController';
 import AdminController from './controllers/AdminController';
 import multer from 'multer';
+import PaymentController from './controllers/PaymentController';
 
 const upload = multer();
 const router = express.Router();
@@ -28,5 +29,7 @@ router.delete('/favorites/:id', ensureAuth, FavoritesController.delete);
 
 router.get('/users/current', ensureAuth, UsersController.userData);
 router.put('/users/current', ensureAuth, UsersController.update);
+
+router.post('/payment', ensureAuth, PaymentController.buyProduct);
 
 export { router };
