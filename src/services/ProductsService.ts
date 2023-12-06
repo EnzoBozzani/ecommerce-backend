@@ -39,6 +39,24 @@ export default class ProductsService {
 		};
 	}
 
+	static async findFeaturedProducts(page: number, perPage: number) {
+		const offset = (page - 1) * perPage;
+		const { count, rows } = await Product.findAndCountAll({
+			where: {
+				featured: true,
+			},
+			limit: perPage,
+			offset,
+		});
+
+		return {
+			products: rows,
+			page,
+			perPage,
+			total: count,
+		};
+	}
+
 	static async findById(productId: number) {
 		const product = await Product.findByPk(productId);
 		return product;

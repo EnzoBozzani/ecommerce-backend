@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import ProductsService from '../services/ProductsService';
 import { getPaginationParams } from '../helpers/getPaginationParams';
-import { AuthenticatedRequest } from '../middlewares/auth';
 
 export default class ProductsController {
 	static async findProducts(req: Request, res: Response) {
@@ -24,7 +23,19 @@ export default class ProductsController {
 				order,
 				name || ''
 			);
-			return res.json(paginatedProducts);
+			return res.status(200).json(paginatedProducts);
+		} catch (err) {
+			if (err instanceof Error) {
+				return res.status(400).json({ message: err.message });
+			}
+		}
+	}
+
+	static async getFeaturedProducts(req: Request, res: Response) {
+		const [pageNumber, perPageNumber] = getPaginationParams(req.query);
+		try {
+			const paginatedFeaturedProducts = await ProductsService.findFeaturedProducts(pageNumber, perPageNumber);
+			return res.status(200).json(paginatedFeaturedProducts);
 		} catch (err) {
 			if (err instanceof Error) {
 				return res.status(400).json({ message: err.message });

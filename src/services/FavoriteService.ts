@@ -12,15 +12,7 @@ export default class FavoriteService {
 			attributes: [['user_id', 'userId']],
 			include: {
 				association: 'Product',
-				attributes: [
-					'id',
-					'name',
-					'description',
-					'price',
-					['image1_url', 'image1Url'],
-					['image1_url', 'image1Url'],
-					['image1_url', 'image1Url'],
-				],
+				attributes: ['id', 'name', 'description', 'price', 'images'],
 			},
 		});
 		const products = favorites.map((favorite) => favorite.Product);

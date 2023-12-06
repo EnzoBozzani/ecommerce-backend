@@ -7,7 +7,7 @@ export default class AuthController {
 		const { firstName, lastName, email, password, birth, phone } = req.body;
 		try {
 			const userAlreadyExists = await UsersService.findByEmail(email);
-			if (userAlreadyExists) throw new Error('Este email já está cadastrado');
+			if (userAlreadyExists) throw new Error('Email already registered!');
 			const newUser = await UsersService.createUser({
 				firstName,
 				lastName,

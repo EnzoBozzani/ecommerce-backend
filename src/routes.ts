@@ -20,6 +20,7 @@ router.post('/auth/register', AuthController.register);
 router.post('/auth/login', AuthController.login);
 
 router.get('/products', ProductsController.findProducts);
+router.get('/products/featured', ProductsController.getFeaturedProducts);
 
 router.get('/favorites', ensureAuth, FavoritesController.getFavoritedProducts);
 router.post('/favorites', ensureAuth, FavoritesController.save);

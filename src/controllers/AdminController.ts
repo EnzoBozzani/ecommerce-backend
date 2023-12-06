@@ -106,6 +106,7 @@ export default class AdminController {
 					description,
 					price,
 					in_stock,
+					featured,
 				});
 			}
 			return res.status(200).json(updatedProduct);
