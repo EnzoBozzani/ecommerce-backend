@@ -1,9 +1,10 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Optional } from 'sequelize';
 import { ProductInstance } from './Product';
 import { UserInstance } from './User';
 import { sequelize } from '../database';
 
 export interface Purchase {
+	id: number;
 	userId: number;
 	productId: number;
 	status: 'shipped' | 'delivered';
@@ -17,12 +18,20 @@ export interface Purchase {
 	addressPostalCode: string;
 }
 
-export interface PurchaseInstance extends Model<Purchase>, Purchase {
+export interface PurchaseCreationAttributes extends Optional<Purchase, 'id'> {}
+
+export interface PurchaseInstance extends Model<Purchase, PurchaseCreationAttributes>, Purchase {
 	Product?: ProductInstance;
 	user?: UserInstance;
 }
 
 export const Purchase = sequelize.define<PurchaseInstance>('Purchase', {
+	id: {
+		allowNull: false,
+		autoIncrement: true,
+		primaryKey: true,
+		type: DataTypes.INTEGER,
+	},
 	userId: {
 		allowNull: false,
 		primaryKey: true,
