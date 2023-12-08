@@ -6,14 +6,15 @@ import { getPaginationParams } from '../helpers/getPaginationParams';
 import JWTService from '../services/JWTService';
 import uploadFiles from '../helpers/uploadFiles';
 import deleteFolder from '../helpers/deleteFolder';
+import PurchaseService from '../services/PurchaseService';
 
 export default class AdminController {
 	static async usersList(req: AuthenticatedRequest, res: Response) {
 		const [pageNumber, perPageNumber] = getPaginationParams(req.query);
-		const isAdmin = await UsersService.isAdmin(req.user!);
-
-		if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
 		try {
+			const isAdmin = await UsersService.isAdmin(req.user!);
+
+			if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
 			const usersList = await UsersService.getUsersList(pageNumber, perPageNumber);
 			return res.status(200).json(usersList);
 		} catch (err) {
@@ -24,11 +25,11 @@ export default class AdminController {
 	}
 
 	static async deleteProduct(req: AuthenticatedRequest, res: Response) {
-		const isAdmin = await UsersService.isAdmin(req.user!);
-		if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
-		const { productId } = req.body;
-		if (!productId) return res.status(400).json({ message: '"productId" property is required' });
 		try {
+			const isAdmin = await UsersService.isAdmin(req.user!);
+			if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
+			const { productId } = req.body;
+			if (!productId) return res.status(400).json({ message: '"productId" property is required' });
 			const deleteMessage = await ProductsService.delete(+productId);
 			deleteFolder(productId);
 			return res.status(200).json(deleteMessage);
@@ -40,14 +41,15 @@ export default class AdminController {
 	}
 
 	static async createProduct(req: AuthenticatedRequest, res: Response) {
-		const isAdmin = await UsersService.isAdmin(req.user!);
-		if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
-		const { name, description, price, in_stock, featured } = req.body;
-		if (!name || !description || !price || !in_stock || !featured)
-			return res.status(400).json({
-				message: 'Missing some of required properties: "name", "description", "price", "in_stock", "featured"!',
-			});
 		try {
+			const isAdmin = await UsersService.isAdmin(req.user!);
+			if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
+			const { name, description, price, in_stock, featured } = req.body;
+			if (!name || !description || !price || !in_stock || !featured)
+				return res.status(400).json({
+					message:
+						'Missing some of required properties: "name", "description", "price", "in_stock", "featured"!',
+				});
 			const newProduct = await ProductsService.create({
 				name,
 				description,
@@ -80,11 +82,11 @@ export default class AdminController {
 	}
 
 	static async updateProduct(req: AuthenticatedRequest, res: Response) {
-		const isAdmin = await UsersService.isAdmin(req.user!);
-		if (!isAdmin) return res.status(401).json({ message: 'Unauthorized! ' });
-		const { productId, name, description, price, in_stock, featured } = req.body;
-		if (!productId) return res.status(400).json({ message: '"productId" property is required' });
 		try {
+			const isAdmin = await UsersService.isAdmin(req.user!);
+			if (!isAdmin) return res.status(401).json({ message: 'Unauthorized! ' });
+			const { productId, name, description, price, in_stock, featured } = req.body;
+			if (!productId) return res.status(400).json({ message: '"productId" property is required' });
 			//@ts-ignore
 			uploadFiles(req.files, productId);
 			let updatedProduct;
@@ -147,6 +149,19 @@ export default class AdminController {
 					token,
 				});
 			});
+		} catch (err) {
+			if (err instanceof Error) {
+				return res.status(400).json({ message: err.message });
+			}
+		}
+	}
+
+	static async getAllPurchases(req: AuthenticatedRequest, res: Response) {
+		try {
+			const isAdmin = await UsersService.isAdmin(req.user!);
+			if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
+			const purchases = await PurchaseService.getAllPurchases();
+			return res.status(200).json(purchases);
 		} catch (err) {
 			if (err instanceof Error) {
 				return res.status(400).json({ message: err.message });

@@ -45,7 +45,7 @@ export default class AuthController {
 					firstName: user.firstName,
 					email: user.email,
 				};
-				const token = JWTService.signToken(payload, '1d');
+				const token = JWTService.signToken(payload, '7d');
 				return res.json({
 					authenticated: true,
 					...payload,

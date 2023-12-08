@@ -1,4 +1,5 @@
 import { AuthenticatedRequest } from '../middlewares/auth';
+import PurchaseService from '../services/PurchaseService';
 import UsersService from '../services/UsersService';
 import { Response } from 'express';
 
@@ -21,6 +22,18 @@ export default class UsersController {
 		try {
 			const userData = await UsersService.findByEmail(user?.email);
 			return res.status(200).json(userData);
+		} catch (err) {
+			if (err instanceof Error) {
+				return res.status(400).json({ message: err.message });
+			}
+		}
+	}
+
+	static async getAllPurchases(req: AuthenticatedRequest, res: Response) {
+		const userId = req.user!.id;
+		try {
+			const purchases = await PurchaseService.getUserPurchases(userId);
+			return res.status(200).json({ purchases });
 		} catch (err) {
 			if (err instanceof Error) {
 				return res.status(400).json({ message: err.message });

@@ -13,6 +13,7 @@ const router = express.Router();
 
 router.post('/admin/auth/login', AdminController.login);
 router.get('/admin/users', ensureAuth, AdminController.usersList);
+router.get('/admin/purchases', ensureAuth, AdminController.getAllPurchases);
 router.post('/admin/products', ensureAuth, upload.array('images', 3), AdminController.createProduct);
 router.delete('/admin/products', ensureAuth, AdminController.deleteProduct);
 router.put('/admin/products', ensureAuth, upload.array('images', 3), AdminController.updateProduct);
@@ -28,6 +29,7 @@ router.post('/favorites', ensureAuth, FavoritesController.save);
 router.delete('/favorites/:id', ensureAuth, FavoritesController.delete);
 
 router.get('/users/current', ensureAuth, UsersController.userData);
+router.get('/users/current/purchases', ensureAuth, UsersController.getAllPurchases);
 router.put('/users/current', ensureAuth, UsersController.update);
 
 router.post('/payment', ensureAuth, PaymentController.buyProduct);

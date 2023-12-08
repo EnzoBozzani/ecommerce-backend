@@ -2,7 +2,7 @@ import { Response } from 'express';
 import { AuthenticatedRequest } from '../middlewares/auth';
 import Stripe from 'stripe';
 import ProductsService from '../services/ProductsService';
-import PaymentService from '../services/PaymentService';
+import PurchaseService from '../services/PurchaseService';
 
 const stripe = new Stripe(process.env.STRIPE_KEY || '');
 
@@ -45,7 +45,7 @@ export default class PaymentController {
 				description: `Payment of R$${product?.price} for product: ${amount}`,
 			});
 
-			const purchase = await PaymentService.createPurchase({
+			const purchase = await PurchaseService.createPurchase({
 				userId,
 				productId,
 				addressCity,
