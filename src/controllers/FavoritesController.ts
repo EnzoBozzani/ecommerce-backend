@@ -10,7 +10,8 @@ export default class FavoritesController {
 		try {
 			const favorite = await FavoriteService.create(+userId, +productId);
 			const product = await ProductsService.findById(+productId);
-			product!.num_favorites++;
+			if (!product) return res.status(400).json({ message: 'Product does not exist!' });
+			product.num_favorites!++;
 			product?.save();
 			return res.status(201).json(favorite);
 		} catch (err) {
@@ -35,17 +36,16 @@ export default class FavoritesController {
 	static async delete(req: AuthenticatedRequest, res: Response) {
 		const userId = req.user!.id;
 		const { productId } = req.body;
+		if (!productId) return res.status(400).json({ message: '"productId" property is required' });
 		try {
-			const isFavorited = await FavoriteService.isFavorited(userId, productId);
-			if (isFavorited)
-				return res
-					.status(400)
-					.json({ message: 'Erro! Produto não está salvo como favorito por este usuário!' });
-			await FavoriteService.delete(+userId, +productId);
 			const product = await ProductsService.findById(+productId);
-			product!.num_favorites--;
+			if (!product) return res.status(400).json({ message: 'Product does not exist!' });
+			const isFavorited = await FavoriteService.isFavorited(userId, productId);
+			if (!isFavorited) return res.status(400).json({ message: 'Product not favorited by this user!' });
+			await FavoriteService.delete(+userId, +productId);
+			product.num_favorites!--;
 			product?.save();
-			return res.status(200).json({ message: 'Deletado com sucesso!' });
+			return res.status(200).json({ message: 'Deleted with success!' });
 		} catch (err) {
 			if (err instanceof Error) {
 				return res.status(400).json({ message: err.message });

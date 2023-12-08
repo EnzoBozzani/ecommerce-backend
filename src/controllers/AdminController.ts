@@ -27,6 +27,7 @@ export default class AdminController {
 		const isAdmin = await UsersService.isAdmin(req.user!);
 		if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
 		const { productId } = req.body;
+		if (!productId) return res.status(400).json({ message: '"productId" property is required' });
 		try {
 			const deleteMessage = await ProductsService.delete(+productId);
 			deleteFolder(productId);
@@ -41,14 +42,18 @@ export default class AdminController {
 	static async createProduct(req: AuthenticatedRequest, res: Response) {
 		const isAdmin = await UsersService.isAdmin(req.user!);
 		if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
-		const { name, description, price, num_favorites, in_stock, featured } = req.body;
+		const { name, description, price, in_stock, featured } = req.body;
+		if (!name || !description || !price || !in_stock || !featured)
+			return res.status(400).json({
+				message: 'Missing some of required properties: "name", "description", "price", "in_stock", "featured"!',
+			});
 		try {
 			const newProduct = await ProductsService.create({
 				name,
 				description,
 				price,
+				num_favorites: 0,
 				images: [],
-				num_favorites,
 				in_stock,
 				featured,
 			});
@@ -78,6 +83,7 @@ export default class AdminController {
 		const isAdmin = await UsersService.isAdmin(req.user!);
 		if (!isAdmin) return res.status(401).json({ message: 'Unauthorized! ' });
 		const { productId, name, description, price, in_stock, featured } = req.body;
+		if (!productId) return res.status(400).json({ message: '"productId" property is required' });
 		try {
 			//@ts-ignore
 			uploadFiles(req.files, productId);
@@ -119,6 +125,8 @@ export default class AdminController {
 
 	static async login(req: Request, res: Response) {
 		const { email, password } = req.body;
+		if (!email || !password)
+			return res.status(400).json({ message: 'Missing some of required properties: "email", "password"' });
 		try {
 			const user = await UsersService.findByEmail(email);
 			if (!user) return res.status(404).json({ message: 'Email not registered!' });

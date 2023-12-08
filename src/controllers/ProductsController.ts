@@ -6,7 +6,8 @@ export default class ProductsController {
 	static async findProducts(req: Request, res: Response) {
 		const { name, order, param } = req.body;
 
-		if (!order || !param) return res.status(400).json({ message: '"order" and "param" are required' });
+		if (!order || !param)
+			return res.status(400).json({ message: 'Missing some of required properties: "order", "param"' });
 
 		if (param !== 'price' && param !== 'num_favorites')
 			return res.status(400).json({ message: '"param" must be "price" or "num_favorites"' });

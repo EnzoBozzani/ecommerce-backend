@@ -5,6 +5,11 @@ import JWTService from '../services/JWTService';
 export default class AuthController {
 	static async register(req: Request, res: Response) {
 		const { firstName, lastName, email, password, birth, phone } = req.body;
+		if (!firstName || !lastName || !email || !password || !birth || !phone)
+			return res.status(400).json({
+				message:
+					'Missing some of required properties: "firstName", "lastName", "email", "password", "birth", "phone"',
+			});
 		try {
 			const userAlreadyExists = await UsersService.findByEmail(email);
 			if (userAlreadyExists) throw new Error('Email already registered!');
@@ -27,6 +32,8 @@ export default class AuthController {
 
 	static async login(req: Request, res: Response) {
 		const { email, password } = req.body;
+		if (!email || !password)
+			return res.status(400).json({ message: 'Missing some of required properties: "email", "password"' });
 		try {
 			const user = await UsersService.findByEmail(email);
 			if (!user) return res.status(404).json({ message: 'Email not registered!' });
