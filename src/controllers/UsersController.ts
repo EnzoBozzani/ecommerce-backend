@@ -17,6 +17,25 @@ export default class UsersController {
 		}
 	}
 
+	static async updatePassword(req: AuthenticatedRequest, res: Response) {
+		{
+			const user = req.user!;
+			const { currentPassword, newPassword } = req.body;
+			user.checkPassword(currentPassword, async (err, isSame) => {
+				try {
+					if (err) return res.status(400).json({ message: err.message });
+					if (!isSame) return res.status(400).json({ message: 'Incorrect password!' });
+					await UsersService.updatePassword(user.id, newPassword);
+					return res.status(204).send();
+				} catch (err) {
+					if (err instanceof Error) {
+						return res.status(400).json({ message: err.message });
+					}
+				}
+			});
+		}
+	}
+
 	static async userData(req: AuthenticatedRequest, res: Response) {
 		const user = req.user!;
 		try {

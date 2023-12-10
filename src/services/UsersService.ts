@@ -26,6 +26,19 @@ export default class UsersService {
 		return user;
 	}
 
+	static async updatePassword(id: number, password: string) {
+		const [numberOfAffectedRows, updatedUser] = await User.update(
+			{ password },
+			{
+				where: { id },
+				returning: true,
+				individualHooks: true,
+			}
+		);
+
+		return updatedUser[0];
+	}
+
 	static async getUsersList(page: number, perPage: number) {
 		const offset = (page - 1) * perPage;
 

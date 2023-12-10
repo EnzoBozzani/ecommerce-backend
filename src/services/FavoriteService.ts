@@ -30,4 +30,8 @@ export default class FavoriteService {
 		const isFavorited = await Favorite.findOne({ where: { userId, productId } });
 		return isFavorited;
 	}
+
+	static async deleteAllFromProduct(productId: number) {
+		await Favorite.destroy({ where: { productId } });
+	}
 }

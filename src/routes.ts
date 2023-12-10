@@ -31,6 +31,7 @@ router.delete('/favorites/:id', ensureAuth, FavoritesController.delete);
 router.get('/users/current', ensureAuth, UsersController.userData);
 router.get('/users/current/purchases', ensureAuth, UsersController.getAllPurchases);
 router.put('/users/current', ensureAuth, UsersController.update);
+router.put('/users/current/password', ensureAuth, UsersController.updatePassword);
 
 router.post('/payment', ensureAuth, PaymentController.buyProduct);
 

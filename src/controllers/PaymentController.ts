@@ -60,7 +60,11 @@ export default class PaymentController {
 			});
 
 			product!.in_stock--;
-			product?.save();
+			if (product.in_stock === 0) {
+				await ProductsService.delete(+productId);
+			} else {
+				product?.save();
+			}
 
 			return res.status(200).json(purchase);
 		} catch (err) {

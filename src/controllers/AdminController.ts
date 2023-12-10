@@ -7,6 +7,7 @@ import JWTService from '../services/JWTService';
 import uploadFiles from '../helpers/uploadFiles';
 import deleteFolder from '../helpers/deleteFolder';
 import PurchaseService from '../services/PurchaseService';
+import FavoriteService from '../services/FavoriteService';
 
 export default class AdminController {
 	static async usersList(req: AuthenticatedRequest, res: Response) {
@@ -31,6 +32,7 @@ export default class AdminController {
 			const { productId } = req.body;
 			if (!productId) return res.status(400).json({ message: '"productId" property is required' });
 			const deleteMessage = await ProductsService.delete(+productId);
+			await FavoriteService.deleteAllFromProduct(+productId);
 			deleteFolder(productId);
 			return res.status(200).json(deleteMessage);
 		} catch (err) {
