@@ -4,7 +4,7 @@ import { getPaginationParams } from '../helpers/getPaginationParams';
 
 export default class ProductsController {
 	static async findProducts(req: Request, res: Response) {
-		const { name, order, param } = req.body;
+		const { name, order, param } = req.query;
 
 		if (!order || !param)
 			return res.status(400).json({ message: 'Missing some of required properties: "order", "param"' });
@@ -22,7 +22,7 @@ export default class ProductsController {
 				perPageNumber,
 				param,
 				order,
-				name || ''
+				(name as string) || ''
 			);
 			return res.status(200).json(paginatedProducts);
 		} catch (err) {
