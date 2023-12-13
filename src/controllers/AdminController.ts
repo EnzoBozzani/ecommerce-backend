@@ -133,12 +133,12 @@ export default class AdminController {
 			return res.status(400).json({ message: 'Missing some of required properties: "email", "password"' });
 		try {
 			const user = await UsersService.findByEmail(email);
-			if (!user) return res.status(404).json({ message: 'Email not registered!' });
+			if (!user) return res.status(404).json({ message: 'Senha e/ou email incorretos!' });
 			const isAdmin = await UsersService.isAdmin(user);
-			if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
+			if (!isAdmin) return res.status(401).json({ message: 'Senha e/ou email incorretos!' });
 			user.checkPassword(password, (err, isSame) => {
 				if (err) return res.status(400).json({ message: err.message });
-				if (!isSame) return res.status(401).json({ message: 'Incorrect password!' });
+				if (!isSame) return res.status(401).json({ message: 'Senha e/ou email incorretos!' });
 				const payload = {
 					id: user.id,
 					firstName: user.firstName,
