@@ -41,6 +41,15 @@ export default class ProductsService {
 
 	static async getAllProducts() {
 		const { count, rows } = await Product.findAndCountAll({
+			attributes: [
+				'id',
+				'name',
+				'description',
+				'price',
+				'featured',
+				['in_stock', 'inStock'],
+				['num_favorites', 'numFavorites'],
+			],
 			order: [['name', 'ASC']],
 		});
 		return {
