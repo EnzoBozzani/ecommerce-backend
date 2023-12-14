@@ -14,6 +14,7 @@ const router = express.Router();
 router.post('/admin/auth/login', AdminController.login);
 router.get('/admin/users', ensureAuth, AdminController.usersList);
 router.get('/admin/purchases', ensureAuth, AdminController.getAllPurchases);
+router.get('/admin/products', ensureAuth, AdminController.getAllProducts);
 router.post('/admin/products', ensureAuth, upload.array('images', 3), AdminController.createProduct);
 router.delete('/admin/products', ensureAuth, AdminController.deleteProduct);
 router.put('/admin/products', ensureAuth, upload.array('images', 3), AdminController.updateProduct);

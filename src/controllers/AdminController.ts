@@ -2,7 +2,6 @@ import { AuthenticatedRequest } from '../middlewares/auth';
 import UsersService from '../services/UsersService';
 import { Request, Response } from 'express';
 import ProductsService from '../services/ProductsService';
-import { getPaginationParams } from '../helpers/getPaginationParams';
 import JWTService from '../services/JWTService';
 import uploadFiles from '../helpers/uploadFiles';
 import deleteFolder from '../helpers/deleteFolder';
@@ -10,13 +9,25 @@ import PurchaseService from '../services/PurchaseService';
 import FavoriteService from '../services/FavoriteService';
 
 export default class AdminController {
+	static async getAllProducts(req: AuthenticatedRequest, res: Response) {
+		try {
+			const isAdmin = await UsersService.isAdmin(req.user!);
+			if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
+			const productsList = await ProductsService.getAllProducts();
+			return res.status(200).json(productsList);
+		} catch (err) {
+			if (err instanceof Error) {
+				return res.status(400).json({ message: err.message });
+			}
+		}
+	}
+
 	static async usersList(req: AuthenticatedRequest, res: Response) {
-		const [pageNumber, perPageNumber] = getPaginationParams(req.query);
 		try {
 			const isAdmin = await UsersService.isAdmin(req.user!);
 
 			if (!isAdmin) return res.status(401).json({ message: 'Unauthorized!' });
-			const usersList = await UsersService.getUsersList(pageNumber, perPageNumber);
+			const usersList = await UsersService.getUsersList();
 			return res.status(200).json(usersList);
 		} catch (err) {
 			if (err instanceof Error) {

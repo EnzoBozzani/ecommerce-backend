@@ -39,10 +39,8 @@ export default class UsersService {
 		return updatedUser[0];
 	}
 
-	static async getUsersList(page: number, perPage: number) {
-		const offset = (page - 1) * perPage;
-
-		const users = await User.findAll({
+	static async getUsersList() {
+		const { count, rows } = await User.findAndCountAll({
 			order: [
 				['first_name', 'ASC'],
 				['last_name', 'ASC'],
@@ -58,10 +56,11 @@ export default class UsersService {
 				['updated_at', 'updatedAt'],
 				['created_at', 'createdAt'],
 			],
-			limit: perPage,
-			offset,
 		});
-		return users;
+		return {
+			users: rows,
+			total: count,
+		};
 	}
 
 	static async isAdmin(user: UserInstance) {
