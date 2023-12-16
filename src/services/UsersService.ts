@@ -46,16 +46,7 @@ export default class UsersService {
 				['last_name', 'ASC'],
 			],
 			where: { role: 'user' },
-			attributes: [
-				'id',
-				'firstName',
-				'lastName',
-				'phone',
-				'birth',
-				'email',
-				['updated_at', 'updatedAt'],
-				['created_at', 'createdAt'],
-			],
+			attributes: ['id', 'firstName', 'lastName', 'phone', 'email'],
 		});
 		return {
 			users: rows,

@@ -18,7 +18,8 @@ export default class PurchaseService {
 	}
 
 	static async getAllPurchases() {
-		const purchases = await Purchase.findAll({
+		const { rows, count } = await Purchase.findAndCountAll({
+			attributes: ['id', 'userId', 'productId', 'status', 'amount'],
 			include: [
 				{
 					association: 'Product',
@@ -30,6 +31,9 @@ export default class PurchaseService {
 				},
 			],
 		});
-		return purchases;
+		return {
+			purchases: rows,
+			total: count,
+		};
 	}
 }
