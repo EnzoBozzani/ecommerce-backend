@@ -24,6 +24,7 @@ router.post('/auth/login', AuthController.login);
 
 router.get('/products', ProductsController.findProducts);
 router.get('/products/featured', ProductsController.getFeaturedProducts);
+router.get('/products/:id', ProductsController.getProductByID);
 
 router.get('/favorites', ensureAuth, FavoritesController.getFavoritedProducts);
 router.post('/favorites', ensureAuth, FavoritesController.save);

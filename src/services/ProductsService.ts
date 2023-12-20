@@ -77,7 +77,7 @@ export default class ProductsService {
 		const product = await Product.findByPk(productId);
 		if (!product) return { message: "Product doesn't exist!" };
 		await product.destroy();
-		return { message: 'Successfully deleted!' };
+		return { message: 'Deletado com sucesso!' };
 	}
 
 	static async create(attributes: ProductCreationAttributes) {

@@ -24,7 +24,7 @@ export default class UsersController {
 			user.checkPassword(currentPassword, async (err, isSame) => {
 				try {
 					if (err) return res.status(400).json({ message: err.message });
-					if (!isSame) return res.status(400).json({ message: 'Incorrect password!' });
+					if (!isSame) return res.status(400).json({ message: 'Senha errada!' });
 					await UsersService.updatePassword(user.id, newPassword);
 					return res.status(204).send();
 				} catch (err) {
