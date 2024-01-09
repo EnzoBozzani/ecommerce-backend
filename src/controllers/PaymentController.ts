@@ -30,7 +30,7 @@ export default class PaymentController {
 			!addressStreet ||
 			!addressPostalCode
 		)
-			return res.status(200).json({
+			return res.status(400).json({
 				message:
 					'Missing some of required properties: "productId", "stripeToken", "addressCity", "addressCountry", "adressNumber", "addressState", "addressStreet", "addressPostalCode"',
 			});
@@ -69,6 +69,23 @@ export default class PaymentController {
 				product?.save();
 			}
 
+			return res.status(200).json(purchase);
+		} catch (err) {
+			if (err instanceof Error) {
+				return res.status(400).json({ message: err.message });
+			}
+		}
+	}
+
+	static async setProductAsDelivered(req: AuthenticatedRequest, res: Response) {
+		const userId = req.user!.id;
+		const { productId } = req.body;
+		if (!productId)
+			return res.status(400).json({
+				message: 'Missing some of required properties: "productId"',
+			});
+		try {
+			const purchase = await PurchaseService.updatePurchase(Number(userId), Number(productId));
 			return res.status(200).json(purchase);
 		} catch (err) {
 			if (err instanceof Error) {

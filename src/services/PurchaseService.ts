@@ -36,4 +36,12 @@ export default class PurchaseService {
 			total: count,
 		};
 	}
+
+	static async updatePurchase(userId: number, productId: number) {
+		const purchase = await Purchase.findOne({ where: { userId, productId } });
+		if (!purchase) return null;
+		purchase!.status = 'delivered';
+		purchase.save();
+		return purchase;
+	}
 }

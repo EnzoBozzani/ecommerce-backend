@@ -36,5 +36,6 @@ router.put('/users/current', ensureAuth, UsersController.update);
 router.put('/users/current/password', ensureAuth, UsersController.updatePassword);
 
 router.post('/payment', ensureAuth, PaymentController.buyProduct);
+router.put('/payment/delivered', ensureAuth, PaymentController.setProductAsDelivered);
 
 export { router };
