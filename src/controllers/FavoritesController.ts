@@ -21,6 +21,21 @@ export default class FavoritesController {
 		}
 	}
 
+	static async isProductFavorited(req: AuthenticatedRequest, res: Response) {
+		const userId = req.user!.id;
+		const { id } = req.query;
+		if (!id) return res.status(400).json({ message: 'productId is required' });
+		try {
+			const favorite = await FavoriteService.isFavorited(+userId, +id);
+			if (favorite) return res.status(200).json({ favorited: true });
+			return res.status(200).json({ favorited: false });
+		} catch (err) {
+			if (err instanceof Error) {
+				return res.status(400).json({ message: err.message });
+			}
+		}
+	}
+
 	static async getFavoritedProducts(req: AuthenticatedRequest, res: Response) {
 		const userId = req.user!.id;
 		try {
