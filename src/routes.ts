@@ -29,7 +29,7 @@ router.get('/products/:id', ProductsController.getProductByID);
 router.get('/favorites', ensureAuth, FavoritesController.getFavoritedProducts);
 router.get('/isFavorited', ensureAuth, FavoritesController.isProductFavorited);
 router.post('/favorites', ensureAuth, FavoritesController.save);
-router.delete('/favorites/:id', ensureAuth, FavoritesController.delete);
+router.delete('/favorites', ensureAuth, FavoritesController.delete);
 
 router.get('/users/current', ensureAuth, UsersController.userData);
 router.get('/users/current/purchases', ensureAuth, UsersController.getAllPurchases);
